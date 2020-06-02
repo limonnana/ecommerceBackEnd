@@ -1,5 +1,7 @@
 package com.limonnana.backend02.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -17,6 +19,8 @@ public class Category {
 
     private String name;
 
+
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "categoryParent_id")
     private Category categoryParent;
@@ -60,5 +64,14 @@ public class Category {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+
+    public Category getCategoryParent() {
+        return categoryParent;
+    }
+
+    public void setCategoryParent(Category categoryParent) {
+        this.categoryParent = categoryParent;
     }
 }
