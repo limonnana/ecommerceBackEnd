@@ -31,8 +31,6 @@ public class CategoryController {
     public List findAll(@RequestHeader Map<String, String> m) {
 
         List<Category> l = categoryRepository.findAll();
-       // Gson gson = new Gson();
-
 
         return l;
     }

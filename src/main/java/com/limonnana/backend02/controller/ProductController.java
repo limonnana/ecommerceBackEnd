@@ -2,9 +2,13 @@ package com.limonnana.backend02.controller;
 
 
 import com.google.gson.Gson;
+import com.limonnana.backend02.entity.Category;
 import com.limonnana.backend02.entity.Product;
-import com.limonnana.backend02.entity.User;
+import com.limonnana.backend02.repository.CategoryRepository;
 import com.limonnana.backend02.repository.ProductRepository;
+import com.limonnana.backend02.services.CategoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +20,16 @@ import java.util.Map;
 @RequestMapping("/secure/product")
 public class ProductController {
 
+    Logger logger = LoggerFactory.getLogger(ProductController.class);
+
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping(value="/findAll")
     public List findAll(@RequestHeader Map<String, String> m) {
@@ -29,9 +41,16 @@ public class ProductController {
 
     @PostMapping(value="/create")
     public Product create(@RequestBody Product product) {
+
         Gson gson = new Gson();
-        System.out.println(gson.toJson(product));
-        return productRepository.save(product);
+        logger.info("Product: " + gson.toJson(product));
+        if(product.getCategoryParent() != null && !product.getCategoryParent().equals("")){
+            categoryService.saveProduct(product);
+        }else{
+            product = productRepository.save(product);
+        }
+
+        return product;
     }
 
     @GetMapping(value = "/getProduct/{id}")
@@ -44,7 +63,8 @@ public class ProductController {
     @DeleteMapping(path ={"/deleteProduct/{id}"})
     public String delete(@PathVariable("id") long id) {
 
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id).get();
+        categoryService.deleteProduct(product);
 
         return "{\"message\":200}";
 

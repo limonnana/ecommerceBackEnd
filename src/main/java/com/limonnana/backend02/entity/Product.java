@@ -4,6 +4,7 @@ package com.limonnana.backend02.entity;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "PRODUCT")
@@ -16,7 +17,8 @@ public class Product {
     private String name;
     private String price;
     private String description;
-
+    @Transient
+    private String categoryParent;
 
     public Long getProductId() {
         return productId;
@@ -48,5 +50,26 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCategoryParent() {
+        return categoryParent;
+    }
+
+    public void setCategoryParent(String categoryParent) {
+        this.categoryParent = categoryParent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return productId.equals(product.getProductId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId);
     }
 }

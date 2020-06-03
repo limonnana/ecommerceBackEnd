@@ -19,6 +19,14 @@ public class Category {
 
     private String name;
 
+    @OneToMany(targetEntity=Product.class, fetch = FetchType.LAZY,orphanRemoval = false, cascade=CascadeType.ALL)
+    @JoinTable(
+            name = "CATEGORY_PRODUCT",
+            joinColumns = @JoinColumn(name = "CATEGORY_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PRODUCT_ID")
+    )
+    private Set<Product> products;
+
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.ALL})
@@ -73,5 +81,13 @@ public class Category {
 
     public void setCategoryParent(Category categoryParent) {
         this.categoryParent = categoryParent;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 }
