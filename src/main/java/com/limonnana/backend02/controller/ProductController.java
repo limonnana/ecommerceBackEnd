@@ -39,6 +39,17 @@ public class ProductController {
         return l;
     }
 
+    @PostMapping(value="/update")
+    public Product update(@RequestBody Product product) {
+
+        Gson gson = new Gson();
+        logger.info("Product: " + gson.toJson(product));
+
+            product = productRepository.save(product);
+
+            return product;
+    }
+
     @PostMapping(value="/create")
     public Product create(@RequestBody Product product) {
 

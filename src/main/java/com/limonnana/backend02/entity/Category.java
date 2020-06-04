@@ -19,7 +19,7 @@ public class Category {
 
     private String name;
 
-    @OneToMany(targetEntity=Product.class, fetch = FetchType.LAZY,orphanRemoval = false, cascade=CascadeType.ALL)
+    @OneToMany(targetEntity=Product.class, fetch = FetchType.LAZY,orphanRemoval = false, cascade=CascadeType.PERSIST)
     @JoinTable(
             name = "CATEGORY_PRODUCT",
             joinColumns = @JoinColumn(name = "CATEGORY_ID"),
@@ -29,11 +29,11 @@ public class Category {
 
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "categoryParent_id")
     private Category categoryParent;
 
-    @OneToMany(mappedBy = "categoryParent",cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "categoryParent",cascade = {CascadeType.PERSIST})
     private Set<Category> categoryList = new HashSet<Category>();
 
     public Long getCategoryId() {
