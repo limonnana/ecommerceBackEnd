@@ -4,6 +4,7 @@ package com.limonnana.backend02.entity;
 
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,6 +20,14 @@ public class Product {
     private String description;
     @Transient
     private String categoryParent;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @JoinTable(
+            name = "PRODUCT_KEY_WORDS",
+            joinColumns = @JoinColumn(name = "PRODUCT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "KEY_WORD_ID")
+    )
+    private List<KeyWord> keyWords;
 
     public Long getProductId() {
         return productId;
@@ -71,5 +80,14 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(productId);
+    }
+
+
+    public List<KeyWord> getKeyWords() {
+        return keyWords;
+    }
+
+    public void setKeyWords(List<KeyWord> keyWords) {
+        this.keyWords = keyWords;
     }
 }
