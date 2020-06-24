@@ -5,7 +5,7 @@ import java.util.Map;
 public class OrderDTO {
 
  private Long userId;
- private Map<Long, Integer> productsQuantities;
+ private Map<String, Integer> productsQuantities;
 
     public Long getUserId() {
         return userId;
@@ -15,11 +15,12 @@ public class OrderDTO {
         this.userId = userId;
     }
 
-    public Map<Long, Integer> getProductsQuantities() {
+
+    public Map<String, Integer> getProductsQuantities() {
         return productsQuantities;
     }
 
-    public void setProductsQuantities(Map<Long, Integer> productsQuantities) {
+    public void setProductsQuantities(Map<String, Integer> productsQuantities) {
         this.productsQuantities = productsQuantities;
     }
 }

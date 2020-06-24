@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,18 +19,19 @@ public class Order {
     @Column(name = "ORDER_ID")
     private Long orderId;
 
-    @OneToMany(targetEntity=Product.class, fetch = FetchType.EAGER, orphanRemoval = false)
+    @OneToMany(targetEntity=OrderProductQuantityTotal.class, fetch = FetchType.EAGER, orphanRemoval = false, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "ORDER_PRODUCT",
             joinColumns = @JoinColumn(name = "ORDER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "PRODUCT_ID")
+            inverseJoinColumns = @JoinColumn(name = "ORDER_PRODUCT_QUANTITY_ID")
     )
-    private List<Product> productList;
+    private List<OrderProductQuantityTotal> productList = new ArrayList<>();
+
 
     @OneToOne(optional=false,fetch=FetchType.EAGER)
     @JoinColumn(name="USER_ID")
     private User user;
-    private String total;
+    private String totalTotal;
     private String created;
 
     @Column(nullable = false, updatable = false)
@@ -47,13 +49,6 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
-    }
 
     public User getUser() {
         return user;
@@ -63,12 +58,12 @@ public class Order {
         this.user = user;
     }
 
-    public String getTotal() {
-        return total;
+    public String getTotalTotal() {
+        return totalTotal;
     }
 
-    public void setTotal(String total) {
-        this.total = total;
+    public void setTotalTotal(String totalTotal) {
+        this.totalTotal = totalTotal;
     }
 
     public String getCreated() {
@@ -96,4 +91,11 @@ public class Order {
     }
 
 
+    public List<OrderProductQuantityTotal> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<OrderProductQuantityTotal> productList) {
+        this.productList = productList;
+    }
 }
