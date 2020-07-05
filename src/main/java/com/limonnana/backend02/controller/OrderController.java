@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "**", maxAge = 3600)
@@ -36,6 +37,14 @@ public class OrderController {
     private Double counter = 0.0;
 
 
+    @GetMapping(value="/findAll")
+    public List findAll(@RequestHeader Map<String, String> m) {
+
+        List<Order> l = orderRepository.findAll();
+
+        return l;
+    }
+
     @PostMapping(value="/calculateOrder")
     public OrderDTOResponse calculateOrder(@RequestBody OrderDTO orderDTO){
 
@@ -43,7 +52,6 @@ public class OrderController {
         counter = 0.0;
         Long userId = orderDTO.getUserId();
         User user =  userRepository.findById(userId).get();
-        order.setUser(user);
         Map<String, Integer> productQuantitiesMap = orderDTO.getProductsQuantities();
         logger.info(" Map: " + productQuantitiesMap.isEmpty());
         OrderDTOResponse orderDTOResponse = new OrderDTOResponse();
@@ -54,24 +62,43 @@ public class OrderController {
             Long id = Long.valueOf(entry.getKey());
             Product product = productRepository.findById(id).get();
             OrderProductQuantityTotal opq = new OrderProductQuantityTotal();
-            opq.setProductId(product.getProductId();
+            opq.setProductId(product.getProductId());
             opq.setName(product.getName());
             opq.setPrice(product.getPrice());
             opq.setQuantity(entry.getValue());
             opq.setTotal(calculateTotal(product.getPrice(), entry.getValue()));
             orderDTOResponse.getOrderProductQuantityTotal().add(opq);
-          //  OrderProductQuantityTotal =
             order.getProductList().add(opq);
-           // orderDTOResponse.setTotalTotal(calculateTotalTotal());
         }
         orderDTOResponse.setTotalTotal(String.valueOf(counter));
         order.setTotalTotal(orderDTOResponse.getTotalTotal());
         Gson gson = new Gson();
         String result = gson.toJson(orderDTOResponse);
         logger.info(" RESULT: " + result);
+        user.getOrderList().add(order);
         order = orderService.save(order);
+        orderDTOResponse.setOrderId(order.getOrderId());
         String orderJson = gson.toJson(order);
         logger.info(" ORDER: " + orderJson);
+        return orderDTOResponse;
+    }
+
+    @PostMapping(value="/finishOrder")
+    public OrderDTOResponse finishOrder(@RequestBody OrderDTOResponse orderDTOResponse){
+
+        String result = "SUCCESS";
+        Order o = orderRepository.findById(orderDTOResponse.getOrderId()).get();
+        o.getProductList().clear();
+        o.setProductList(orderDTOResponse.getOrderProductQuantityTotal());
+        o = orderRepository.save(o);
+
+        Gson gson = new Gson();
+        String orderJson = gson.toJson(o);
+        logger.info(" ORDER: " + orderJson);
+
+        orderDTOResponse.setOrderId(o.getOrderId());
+
+
         return orderDTOResponse;
     }
 

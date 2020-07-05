@@ -28,9 +28,6 @@ public class Order {
     private List<OrderProductQuantityTotal> productList = new ArrayList<>();
 
 
-    @OneToOne(optional=false,fetch=FetchType.EAGER)
-    @JoinColumn(name="USER_ID")
-    private User user;
     private String totalTotal;
     private String created;
 
@@ -47,15 +44,6 @@ public class Order {
 
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
-    }
-
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getTotalTotal() {

@@ -5,6 +5,7 @@ import java.util.List;
 
 public class OrderDTOResponse {
 
+    private Long orderId;
     private User user;
     private List<OrderProductQuantityTotal> orderProductQuantityTotal = new ArrayList<>();
     private String totalTotal;
@@ -31,5 +32,13 @@ public class OrderDTOResponse {
 
     public void setTotalTotal(String totalTotal) {
         this.totalTotal = totalTotal;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 }
