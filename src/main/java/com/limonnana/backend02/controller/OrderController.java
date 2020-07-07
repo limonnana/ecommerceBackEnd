@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +43,12 @@ public class OrderController {
     public List findAll(@RequestHeader Map<String, String> m) {
 
         List<Order> l = orderRepository.findAll();
+        SimpleDateFormat dateFor = new SimpleDateFormat("dd/MM/yyyy");
+
+        l.forEach(order -> {
+            Date day = order.getCreatedAt();
+            order.setCreated(dateFor.format(day));
+        });
 
         return l;
     }
@@ -100,6 +108,17 @@ public class OrderController {
 
 
         return orderDTOResponse;
+    }
+
+    @GetMapping(value = "/getOrder/{id}")
+    public Order getOrderBiId(@PathVariable("id") long id){
+        Long userId = orderRepository.getUserFromOrder(id);
+        logger.info("UserId: " + userId);
+        Order order = orderRepository.findById(id).get();
+        Gson gson = new Gson();
+        String orderJson = gson.toJson(order);
+        logger.info(" ORDER: " + orderJson);
+        return order;
     }
 
 

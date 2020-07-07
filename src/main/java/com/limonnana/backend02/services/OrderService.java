@@ -2,6 +2,7 @@ package com.limonnana.backend02.services;
 
 
 import com.limonnana.backend02.entity.Order;
+import com.limonnana.backend02.entity.User;
 import com.limonnana.backend02.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,4 +18,6 @@ public class OrderService {
     public Order save(Order order){
       return  orderRepository.save(order);
     }
+
+
 }
