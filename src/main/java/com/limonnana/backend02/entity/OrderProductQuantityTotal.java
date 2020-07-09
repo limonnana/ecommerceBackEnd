@@ -12,7 +12,7 @@ public class OrderProductQuantityTotal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ORDER_PRODUCT_QUANTITY_ID")
-    private Long OrderProductQuantityId;
+    private Long orderProductQuantityId;
     private Long productId;
     private String name;
     private String price;
@@ -61,10 +61,10 @@ public class OrderProductQuantityTotal {
 
 
     public Long getOrderProductQuantityId() {
-        return OrderProductQuantityId;
+        return orderProductQuantityId;
     }
 
     public void setOrderProductQuantityId(Long orderProductQuantityId) {
-        OrderProductQuantityId = orderProductQuantityId;
+        this.orderProductQuantityId = orderProductQuantityId;
     }
 }
